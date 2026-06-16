@@ -1,0 +1,112 @@
+#include <stdio.h>
+
+#define MAX 10
+
+// Function prototypes
+void inputMatrix(int matrix[MAX][MAX], int rows, int cols);
+void displayMatrix(int matrix[MAX][MAX], int rows, int cols);
+void addMatrices(int mat1[MAX][MAX], int mat2[MAX][MAX], int result[MAX][MAX], int rows, int cols);
+void multiplyMatrices(int mat1[MAX][MAX], int r1, int c1, int mat2[MAX][MAX], int r2, int c2, int result[MAX][MAX]);
+void transposeMatrix(int matrix[MAX][MAX], int r, int c, int result[MAX][MAX]);
+
+int main() {
+    int matA[MAX][MAX], matB[MAX][MAX], result[MAX][MAX];
+    int r1, c1, r2, c2;
+
+    printf("Enter rows and columns for Matrix A: ");
+    scanf("%d %d", &r1, &c1);
+    printf("Enter elements of Matrix A:\n");
+    inputMatrix(matA, r1, c1);
+
+    printf("\nEnter rows and columns for Matrix B: ");
+    scanf("%d %d", &r2, &c2);
+    printf("Enter elements of Matrix B:\n");
+    inputMatrix(matB, r2, c2);
+
+    printf("\n--- Matrix A ---\n");
+    displayMatrix(matA, r1, c1);
+    printf("\n--- Matrix B ---\n");
+    displayMatrix(matB, r2, c2);
+
+    // Matrix Addition
+    if (r1 == r2 && c1 == c2) {
+        addMatrices(matA, matB, result, r1, c1);
+        printf("\n--- Result of Addition (A + B) ---\n");
+        displayMatrix(result, r1, c1);
+    } else {
+        printf("\nAddition not possible! Dimensions must match.\n");
+    }
+
+    // Matrix Multiplication
+    if (c1 == r2) {
+        multiplyMatrices(matA, r1, c1, matB, r2, c2, result);
+        printf("\n--- Result of Multiplication (A * B) ---\n");
+        displayMatrix(result, r1, c2);
+    } else {
+        printf("\nMultiplication not possible! Columns of A must equal rows of B.\n");
+    }
+
+    // Matrix Transpose (for Matrix A)
+    transposeMatrix(matA, r1, c1, result);
+    printf("\n--- Transpose of Matrix A ---\n");
+    displayMatrix(result, c1, r1);
+
+    return 0;
+}
+
+// Function to take matrix input from user
+void inputMatrix(int matrix[MAX][MAX], int rows, int cols) {
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            printf("Element [%d][%d]: ", i, j);
+            scanf("%d", &matrix[i][j]);
+        }
+    }
+}
+
+// Function to display a matrix
+void displayMatrix(int matrix[MAX][MAX], int rows, int cols) {
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            printf("%d\t", matrix[i][j]);
+        }
+        printf("\n");
+    }
+}
+
+// Function to add two matrices
+void addMatrices(int mat1[MAX][MAX], int mat2[MAX][MAX], int result[MAX][MAX], int rows, int cols) {
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            result[i][j] = mat1[i][j] + mat2[i][j];
+        }
+    }
+}
+
+// Function to multiply two matrices
+void multiplyMatrices(int mat1[MAX][MAX], int r1, int c1, int mat2[MAX][MAX], int r2, int c2, int result[MAX][MAX]) {
+    // Initialize result matrix with 0
+    for (int i = 0; i < r1; i++) {
+        for (int j = 0; j < c2; j++) {
+            result[i][j] = 0;
+        }
+    }
+
+    // Perform multiplication logic
+    for (int i = 0; i < r1; i++) {
+        for (int j = 0; j < c2; j++) {
+            for (int k = 0; k < c1; k++) {
+                result[i][j] += mat1[i][k] * mat2[k][j];
+            }
+        }
+    }
+}
+
+// Function to find the transpose of a matrix
+void transposeMatrix(int matrix[MAX][MAX], int r, int c, int result[MAX][MAX]) {
+    for (int i = 0; i < r; i++) {
+        for (int j = 0; j < c; j++) {
+            result[j][i] = matrix[i][j];
+        }
+    }
+}
